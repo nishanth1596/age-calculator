@@ -1,18 +1,65 @@
+import { useForm } from "react-hook-form";
 import InputElement from "./components/InputElement";
 
+export type FormValues = {
+  day: number;
+  month: number;
+  year: number;
+};
+
 function App() {
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm<FormValues>({
+    mode: "onChange",
+  });
+
+  const monthValue = watch("month");
+  const yearValue = watch("year");
+
+  function onSubmit(data: FormValues) {
+    console.log(data);
+  }
+
   return (
     <div>
       <header className="sr-only">
         <h1>Age Calculator App</h1>
       </header>
       <main>
-        <section className="bg-White mx-4 mt-[88px] rounded-3xl rounded-ee-[100px] px-6 py-12">
-          <div className="flex justify-between">
-            <InputElement id="day" name="Day" />
-            <InputElement id="month" name="Month" />
-            <InputElement id="year" name="year" />
-          </div>
+        <section className="bg-White mx-4 mt-[88px] mb-[238px] rounded-3xl rounded-ee-[100px] px-6 py-12">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="flex justify-between"
+          >
+            <InputElement
+              id="day"
+              name="day"
+              register={register}
+              error={errors.day?.message}
+              monthValue={monthValue}
+              yearValue={yearValue}
+            />
+            <InputElement
+              id="month"
+              name="month"
+              register={register}
+              error={errors.month?.message}
+            />
+            <InputElement
+              id="year"
+              name="year"
+              register={register}
+              error={errors.year?.message}
+            />
+
+            <button type="submit" className="hidden">
+              Submit
+            </button>
+          </form>
 
           <div className="relative mt-[52px] flex justify-center">
             <div className="bg-Purple relative z-20 flex h-16 w-16 items-center justify-center rounded-full p-5">
